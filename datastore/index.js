@@ -66,13 +66,21 @@ exports.readOne = (id, callback) => {
 };
 
 exports.update = (id, text, callback) => {
-  var item = items[id];
-  if (!item) {
-    callback(new Error(`No item with id: ${id}`));
-  } else {
-    items[id] = text;
-    callback(null, { id, text });
-  }
+  var fileP = path.join(exports.dataDir, `${id}.txt`);
+
+  fs.readFile(fileP, (err, fileData) => {
+    if (err) {
+      callback(err, 0);
+    } else {
+      fs.writeFile(fileP, text, (err) => {
+        if (err) {
+          throw ('error updating todo');
+        } else {
+          callback(null, {id, text});
+        }
+      });
+    }
+  });
 };
 
 exports.delete = (id, callback) => {
