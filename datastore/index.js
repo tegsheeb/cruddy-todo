@@ -9,12 +9,22 @@ var items = {};
 
 exports.create = (text, callback) => {
   //getNextUniqueId needs to be fixed with callback
-  counter.getNextUniqueId((counterString)=>{
-    console.log(counterString);
-    items[counterString] = text;
-    callback(null, { id, text });
+  counter.getNextUniqueId((err, id)=>{
+    if (err) {
+      throw ('error writing item');
+    } else {
+      items[id] = text;
+      fs.writeFile(`${exports.dataDir}/${id}.txt`, text, (err, data) => {
+        if (err) {
+          throw ('error writing item');
+        } else {
+          callback(null, {id, text});
+        }
+      });
+    }
   });
 };
+
 
 exports.readAll = (callback) => {
   var data = _.map(items, (text, id) => {

@@ -15,15 +15,12 @@ const zeroPaddedNumber = (num) => {
   return sprintf('%05d', num);
 };
 
-// console.log(typeof zeroPaddedNumber(1), 'this is zeroPadded');
-
 const readCounter = (callback) => {
   fs.readFile(exports.counterFile, (err, fileData) => {
     if (err) {
       console.log('error');
       callback(null, 0);
     } else {
-      // console.log('success from readCounter');
       callback(null, Number(fileData));
       console.log(Number(fileData));
     }
@@ -36,7 +33,6 @@ const writeCounter = (count, callback) => {
     if (err) {
       throw ('error writing counter');
     } else {
-      // console.log('success from writeCounter');
       callback(null, counterString);
     }
   });
@@ -45,7 +41,6 @@ const writeCounter = (count, callback) => {
 // Public API - Fix this function //////////////////////////////////////////////
 
 exports.getNextUniqueId = (callback) => {
-
   readCounter((err, count) => {
     count++;
     writeCounter (count, (err, counterString) => {
@@ -55,6 +50,24 @@ exports.getNextUniqueId = (callback) => {
   // return zeroPaddedNumber(counter);
 };
 
+
+// full verison of callback Hell
+// exports.getNextUniqueId = (callback) => {
+//   readCounter((err, count) => {
+//     if (err) {
+//       console.log('error fro ReadCounter');
+//     } else {
+//       count++;
+//       writeCounter(count, (err, counterString) => {
+//         if (err) {
+//           console.log('error from writeCounter');
+//         } else {
+//           callback(err, counterString);
+//         }
+//       });
+//     }
+//   });
+// };
 
 
 // Configuration -- DO NOT MODIFY //////////////////////////////////////////////
