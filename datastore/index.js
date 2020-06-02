@@ -27,10 +27,29 @@ exports.create = (text, callback) => {
 
 
 exports.readAll = (callback) => {
-  var data = _.map(items, (text, id) => {
-    return { id, text };
+  // var data = _.map(items, (text, id) => {
+  //   return { id, text };
+  // });
+  fs.readdir(exports.dataDir, function(err, files) {
+    if (err) {
+      throw ('error scanning directory');
+    } else {
+      if (files.length === 0) {
+        callback(null, []);
+      } else {
+        var list = [];
+        files.forEach(function (file) {
+          var obj = {};
+          obj['id'] = file.substring(0, 5);
+          obj['text'] = file.substring(0, 5);
+          list.push(obj);
+        });
+
+        callback(null, list);
+      }
+    }
+
   });
-  callback(null, data);
 };
 
 exports.readOne = (id, callback) => {
