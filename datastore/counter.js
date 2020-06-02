@@ -15,12 +15,17 @@ const zeroPaddedNumber = (num) => {
   return sprintf('%05d', num);
 };
 
+// console.log(typeof zeroPaddedNumber(1), 'this is zeroPadded');
+
 const readCounter = (callback) => {
   fs.readFile(exports.counterFile, (err, fileData) => {
     if (err) {
+      console.log('error');
       callback(null, 0);
     } else {
+      // console.log('success from readCounter');
       callback(null, Number(fileData));
+      console.log(Number(fileData));
     }
   });
 };
@@ -31,6 +36,7 @@ const writeCounter = (count, callback) => {
     if (err) {
       throw ('error writing counter');
     } else {
+      // console.log('success from writeCounter');
       callback(null, counterString);
     }
   });
@@ -38,9 +44,15 @@ const writeCounter = (count, callback) => {
 
 // Public API - Fix this function //////////////////////////////////////////////
 
-exports.getNextUniqueId = () => {
-  counter = counter + 1;
-  return zeroPaddedNumber(counter);
+exports.getNextUniqueId = (callback) => {
+
+  readCounter((err, count) => {
+    count++;
+    writeCounter (count, (err, counterString) => {
+      callback(err, counterString);
+    });
+  });
+  // return zeroPaddedNumber(counter);
 };
 
 
