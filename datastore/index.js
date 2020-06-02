@@ -54,7 +54,7 @@ exports.readAll = (callback) => {
 
 exports.readOne = (id, callback) => {
   var fileP = path.join(exports.dataDir, `${id}.txt`);
-  console.log(fileP);
+
   fs.readFile(fileP, (err, fileData)=> {
     if (err) {
       callback(err, 0);
@@ -84,14 +84,15 @@ exports.update = (id, text, callback) => {
 };
 
 exports.delete = (id, callback) => {
-  var item = items[id];
-  delete items[id];
-  if (!item) {
-    // report an error if item not found
-    callback(new Error(`No item with id: ${id}`));
-  } else {
-    callback();
-  }
+  var fileP = path.join(exports.dataDir, `${id}.txt`);
+
+  fs.unlink(fileP, (err) => {
+    if (err) {
+      callback(err, 0);
+    } else {
+      callback();
+    }
+  });
 };
 
 // Config+Initialization code -- DO NOT MODIFY /////////////////////////////////
